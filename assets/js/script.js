@@ -28,7 +28,7 @@ let playable = [];
 let currentChannelIndex = 0; // tracks the currently playing channel
 let filtered = [];
 
-const CHANNELS_PER_PAGE = isMobile() == false ? 19 : 20;
+const CHANNELS_PER_PAGE = 30;
 let currentPage = 1;
 let currentCountryChannels = [];
 
@@ -87,13 +87,11 @@ function renderChannels(list) {
 	grid.innerHTML = "";
 
 	list.forEach((c, index) => {
-		if (isMobile() == false) {
-			if (index > 0 && index % 12 === 0) {
-				const ad = document.createElement("div");
-				ad.className = "ad";
-				ad.textContent = "AdSense In-Feed Ad";
-				grid.appendChild(ad);
-			}
+		if (index > 0 && index % 10 === 0) {
+			const ad = document.createElement("div");
+			ad.className = "ad";
+			ad.textContent = "AdSense In-Feed Ad";
+			grid.appendChild(ad);
 		}
 
 		const card = document.createElement("div");
