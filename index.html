@@ -87,7 +87,8 @@
 			<aside class="ad ad-sidebar">Sidebar Ad</aside>
 
 			<!-- Channel Grid -->
-			<section id="channelGrid" class="grid"></section>
+			<section id="channelGrid" class="grid">
+			</section>
 			<!-- Pagination Controls -->
 			<div id="pagination" class="pagination hidden">
 				<button id="firstPage" title="First page" disabled>« First</button>
@@ -99,6 +100,9 @@
 				<button id="lastPage" title="Last page">Last »</button>
 			</div>
 		</main>
+			
+		<!-- Loading Skeleton -->
+		<div id="loading" class="loading">Loading channels…</div>
 		
 		<!-- Footer -->
 		<footer class="site-footer">
@@ -162,9 +166,6 @@
 				<button id="nextChannel" class="nav-btn">Next ⟩</button>
 			</div>
 		</div>
-
-		<!-- Loading Skeleton -->
-		<div id="loading" class="loading">Loading channels…</div>
 
 		<script src="assets/js/hls.js"></script>
 		<script src="assets/js/dash.all.min.js"></script>

@@ -298,6 +298,8 @@ main {
 	text-align: center;
 	padding: 40px;
 	color: var(--muted);
+	font-size: 2rem;
+	font-weight: bold;
 }
 
 /* Responsive */

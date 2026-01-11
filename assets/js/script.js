@@ -73,6 +73,8 @@ async function loadData() {
 		} else {
 			renderChannels(playable); // fallback: show all
 		}
+		
+		loading.style.display = "none";
 
 	} catch (e) {
 		console.error(e);
@@ -170,14 +172,13 @@ function filterPlayableChannels(logosMap) {
 	});
 
 	playable = channels
-		.filter(c => streamMap[c.id])
-		.map(c => ({
-			...c,
-			stream: streamMap[c.id],
-			logo: logosMap[c.id] || 'https://placehold.co/300x150?text=No+Logo'
-			// logo: isUrlRenderable(logosMap[c.id]).then(ok => { ok ? logosMap[c.id] : 'https://placehold.co/300x150?text=No+Logo' })
-		}));
-	loading.style.display = "none";
+	.filter(c => streamMap[c.id])
+	.map(c => ({
+		...c,
+		stream: streamMap[c.id],
+		logo: logosMap[c.id] || 'https://placehold.co/300x150?text=No+Logo'
+		// logo: isUrlRenderable(logosMap[c.id]).then(ok => { ok ? logosMap[c.id] : 'https://placehold.co/300x150?text=No+Logo' })
+	}));
 }
 
 function setTraveseTexts() {
