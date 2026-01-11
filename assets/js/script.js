@@ -44,6 +44,7 @@ async function detectUserCountry() {
 }
 
 async function loadData() {
+	document.querySelector('.footer-bottom').textContent = `© ${new Date().getFullYear()} TaNow IPTV. All rights reserved.`;
 	try {
 		const [channelsRes, streamsRes, countriesRes, logosRes] = await Promise.all([
 			fetch(`${API_BASE}/channels.json`),
@@ -209,7 +210,7 @@ prevBtn.onclick = () => {
 };
 
 function playChannel(url) {
-	console.log("Playing channel:", url);
+	// console.log("Playing channel:", url);
 	const statusText = document.getElementById('playerStatus'); // optional overlay
 
 	resetVideoPlayer(video);
@@ -300,7 +301,7 @@ function playChannel(url) {
 }
 
 async function playVideo(url) {
-	console.log("Playing channel:", url);
+	// console.log("Playing channel:", url);
 	videoError.style.display = "none"; // hide previous errors
 	video.pause();
 	// video.src = "";
@@ -564,7 +565,7 @@ function renderPaginatedChannels() {
 	grid.innerHTML = '';
 
 	const total = currentCountryChannels.length;
-	const totalPages = Math.ceil(total / CHANNELS_PER_PAGE);
+	const totalPages = getTotalPages();
 
 	// Hide pagination if not needed
 	if (total <= CHANNELS_PER_PAGE) {
@@ -584,7 +585,10 @@ function renderPaginatedChannels() {
 	pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
 
 	document.getElementById('prevPage').disabled = currentPage === 1;
+	document.getElementById('firstPage').disabled = currentPage === 1;
+
 	document.getElementById('nextPage').disabled = currentPage === totalPages;
+	document.getElementById('lastPage').disabled = currentPage === totalPages;
 }
 
 function keyTouchEvents(e) {
@@ -654,25 +658,33 @@ function showFavoritesOnly() {
 	renderChannels(favs);
 }
 
+document.getElementById('firstPage').addEventListener('click', () => {
+	if (currentPage !== 1) {
+		currentPage = 1;
+		renderPaginatedChannels();
+	}
+});
 document.getElementById('prevPage').addEventListener('click', () => {
 	if (currentPage > 1) {
 		currentPage--;
 		renderPaginatedChannels();
-		// window.scrollTo({ top: 0, behavior: 'smooth' });
 	}
 });
-
 document.getElementById('nextPage').addEventListener('click', () => {
-	const totalPages = Math.ceil(
-		currentCountryChannels.length / CHANNELS_PER_PAGE
-	);
-
+	const totalPages = getTotalPages();
 	if (currentPage < totalPages) {
 		currentPage++;
 		renderPaginatedChannels();
-		// window.scrollTo({ top: 0, behavior: 'smooth' });
 	}
 });
+document.getElementById('lastPage').addEventListener('click', () => {
+	const totalPages = getTotalPages();
+	if (currentPage !== totalPages) {
+		currentPage = totalPages;
+		renderPaginatedChannels();
+	}
+});
+
 
 const FAVORITES_KEY = "iptv_favorites";
 
@@ -759,5 +771,12 @@ function isMobile() {
 	];
 	return toMatch.some((toMatch) => navigator.userAgent.match(toMatch));
 }
+
+function getTotalPages() {
+	return Math.ceil(
+		currentCountryChannels.length / CHANNELS_PER_PAGE
+	);
+}
+
 
 loadData();

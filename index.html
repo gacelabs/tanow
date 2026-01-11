@@ -3,15 +3,61 @@
 
 	<head>
 		<meta charset="UTF-8" />
-		<title>TaN📺w IPTV</title>
-		<meta name="description"
-			content="Watch free IPTV channels online. Clean, fast, and modern streaming platform." />
+		<title>TaNow IPTV – Watch Free Live TV Channels Worldwide</title>
+
+		<meta name="googlebot" content="max-image-preview:large">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta name="robots" content="index, follow" />
+		<meta itemprop="image" content="assets/images/icon.png" />
+		<meta name="description" content="TaNow IPTV lets you watch free live TV channels from around the world. Stream news, sports, entertainment, and more in a fast, modern, and mobile-friendly IPTV player.">
+		<meta name="keywords" content="IPTV, Live TV, Free IPTV, Online TV, Streaming TV, IPTV Channels, Watch Live TV, TaNow IPTV">
+		<meta name="referrer" content="strict-origin-when-cross-origin">
 
-		<link rel="stylesheet" href="css/style.css" />
+		<meta property="og:type" content="website">
+		<meta property="og:title" content="TaNow IPTV – Free Live TV Streaming Worldwide">
+		<meta property="og:description" content="TaNow IPTV lets you watch free live TV channels from around the world. Stream news, sports, entertainment, and more in a fast, modern, and mobile-friendly IPTV player.">
+		<meta property="og:url" content="https://tanow.online/">
+		<meta property="og:site_name" content="TaNow IPTV">
+		<meta property="og:image" content="https://tanow.online/assets/images/icon.png">
+		<meta property="og:image:width" content="1200">
+		<meta property="og:image:height" content="630">
+		<meta property="og:image:alt" content="TaNow IPTV – Watch Live TV Online">
+
+		<meta name="twitter:card" content="summary_large_image">
+		<meta name="twitter:title" content="TaNow IPTV – Watch Live TV Channels Online">
+		<meta name="twitter:description"
+			content="Stream live TV channels from around the world with TaNow IPTV. Clean design, fast playback, mobile-friendly.">
+		<meta name="twitter:image" content="https://tanow.online/assets/images/icon.png">
+
+		<meta name="theme-color" content="#0f0f0f">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+		<meta name="apple-mobile-web-app-title" content="TaNow IPTV">
+
+		<link rel="shortcut icon" href="assets/images/icon.png" type="image/x-icon" />
+		<link rel="apple-touch-icon" href="assets/images/icon.png">
+		<link rel="canonical" href="https://tanow.online/">
+		<link rel="stylesheet" href="assets/css/style.css" />
 		<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3716182521515143"
 			crossorigin="anonymous"></script>
+
+		<script type="application/ld+json">
+		{
+			"@context": "https://schema.org",
+			"@type": "WebSite",
+			"name": "TaNow IPTV",
+			"url": "https://tanow.online/",
+			"description": "Watch free live TV channels from around the world using a fast, modern IPTV streaming platform.",
+			"publisher": {
+			"@type": "Organization",
+			"name": "TaNow IPTV",
+			"logo": {
+				"@type": "ImageObject",
+				"url": "https://tanow.online/assets/images/logo.png"
+			}
+			}
+		}
+		</script>
 	</head>
 
 	<body>
@@ -24,7 +70,7 @@
 		<!-- Header -->
 		<header>
 			<div class="logo">
-				<a href="/"><img src="assets/logo.png" alt="TaN📺w"></a>
+				<a href="/"><img src="assets/images/logo.png" alt="TaN📺w"></a>
 			</div>
 
 			<input type="search" id="searchInput" placeholder="Search channels..." />
@@ -44,12 +90,48 @@
 			<section id="channelGrid" class="grid"></section>
 			<!-- Pagination Controls -->
 			<div id="pagination" class="pagination hidden">
+				<button id="firstPage" title="First page" disabled>« First</button>
 				<button id="prevPage" disabled>‹ Prev</button>
+			
 				<span id="pageInfo"></span>
+			
 				<button id="nextPage">Next ›</button>
+				<button id="lastPage" title="Last page">Last »</button>
 			</div>
-
 		</main>
+		
+		<!-- Footer -->
+		<footer class="site-footer">
+			<div class="footer-container">
+		
+				<div class="footer-brand">
+					<a href="/"><img src="assets/images/logo.png" alt="TaNow IPTV Logo"></a>
+					<p>
+						TaNow IPTV is a modern IPTV player that lists publicly available
+						live TV channels from around the world.
+					</p>
+				</div>
+		
+				<div class="footer-links">
+					<h4>Legal</h4>
+					<a href="/privacy-policy">Privacy Policy</a>
+					<a href="/terms">Terms of Service</a>
+				</div>
+		
+				<div class="footer-disclaimer">
+					<h4>Disclaimer</h4>
+					<p>
+						TaNow IPTV does not host or upload any video streams.
+						All content is provided by third-party sources.
+					</p>
+				</div>
+		
+			</div>
+		
+			<div class="footer-bottom">
+				© <span>2026</span> TaNow IPTV. All rights reserved.
+			</div>
+		</footer>
 
 		<!-- Player Modal -->
 		<div id="playerModal" class="modal">
@@ -84,11 +166,11 @@
 		<!-- Loading Skeleton -->
 		<div id="loading" class="loading">Loading channels…</div>
 
-		<script src="js/hls.js"></script>
-		<script src="js/dash.all.min.js"></script>
-		<script src="js/svg64.umd.js"></script>
-		<script src="js/swiped-events.js"></script>
-		<script src="js/script.js"></script>
+		<script src="assets/js/hls.js"></script>
+		<script src="assets/js/dash.all.min.js"></script>
+		<script src="assets/js/svg64.umd.js"></script>
+		<script src="assets/js/swiped-events.js"></script>
+		<script src="assets/js/script.js"></script>
 	</body>
 
 </html>
