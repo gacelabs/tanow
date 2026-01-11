@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8" />
+		<title>StreamNow IPTV</title>
+		<meta name="description"
+			content="Watch free IPTV channels online. Clean, fast, and modern streaming platform." />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="robots" content="index, follow" />
+
+		<link rel="stylesheet" href="css/style.css" />
+	</head>
+
+	<body>
+		<!-- Toast Notifications -->
+		<div id="toastContainer"></div>
+
+		<!-- Top Ad Banner -->
+		<div class="ad ad-top">AdSense Banner</div>
+
+		<!-- Header -->
+		<header>
+			<div class="logo">
+				<a href="/"><img src="assets/logo.png" alt="TaN📺w"></a>
+			</div>
+
+			<input type="search" id="searchInput" placeholder="Search channels..." />
+
+			<select id="countryFilter">
+				<option value="">All Countries</option>
+			</select>
+
+			<button id="showFavs">★ Favorites</button>
+		</header>
+
+		<main>
+			<!-- Desktop Sidebar Ad -->
+			<aside class="ad ad-sidebar">Sidebar Ad</aside>
+
+			<!-- Channel Grid -->
+			<section id="channelGrid" class="grid"></section>
+			<!-- Pagination Controls -->
+			<div id="pagination" class="pagination hidden">
+				<button id="prevPage" disabled>‹ Prev</button>
+				<span id="pageInfo"></span>
+				<button id="nextPage">Next ›</button>
+			</div>
+
+		</main>
+
+		<!-- Player Modal -->
+		<div id="playerModal" class="modal">
+			<div class="modal-content">
+				<div class="fav-btn-modal">☆</div>
+				<button id="closeModal">&times;</button>
+
+				<!-- Channel name overlay -->
+				<div id="channelName" class="channel-name"></div>
+				<!-- Channel name overlays -->
+				<div id="fullscreenOverlay" class="fullscreen-overlay" style="display:none;">
+					<div id="prevChannelName" class="overlay-name left"></div>
+					<div id="currentChannelName" class="overlay-name center"></div>
+					<div id="nextChannelName" class="overlay-name right"></div>
+				</div>
+
+				<!-- Video player -->
+				<video id="videoPlayer" controls autoplay name="media"></video>
+				
+				<!-- Audio player -->
+				<audio id="audioPlayer" controls style="display:none;"></audio>
+
+				<!-- Error message -->
+				<div id="videoError" class="video-error" style="display:none;"><span></span>Channel Connection Lost</div>
+		
+				<!-- Navigation buttons -->
+				<button id="prevChannel" class="nav-btn">⟨ Prev</button>
+				<button id="nextChannel" class="nav-btn">Next ⟩</button>
+			</div>
+		</div>
+
+		<!-- Loading Skeleton -->
+		<div id="loading" class="loading">Loading channels…</div>
+
+		<script src="js/hls.js"></script>
+		<script src="js/dash.all.min.js"></script>
+		<script src="js/svg64.umd.js"></script>
+		<script src="js/script.js"></script>
+	</body>
+
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Watch Channel</title>
+	</head>
+
+	<body>
+		<video id="video" controls autoplay width="100%"></video>
+
+
+		<script>
+			const url = new URLSearchParams(window.location.search).get("url");
+			document.getElementById("video").src = url;
+		</script>
+	</body>
+
+</html>
