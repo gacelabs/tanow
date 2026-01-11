@@ -16,6 +16,9 @@ const prevNameEl = document.getElementById("prevChannelName");
 const currentNameEl = document.getElementById("currentChannelName");
 const nextNameEl = document.getElementById("nextChannelName");
 
+const pagination = document.getElementById('pagination');
+const pageInfo = document.getElementById('pageInfo');
+
 videoError.style.display = "none";
 audio.style.display = "none";
 
@@ -25,7 +28,7 @@ let playable = [];
 let currentChannelIndex = 0; // tracks the currently playing channel
 let filtered = [];
 
-const CHANNELS_PER_PAGE = 20;
+const CHANNELS_PER_PAGE = isMobile() == false ? 19 : 20;
 let currentPage = 1;
 let currentCountryChannels = [];
 
@@ -83,11 +86,13 @@ function renderChannels(list) {
 	grid.innerHTML = "";
 
 	list.forEach((c, index) => {
-		if (index > 0 && index % 12 === 0) {
-			const ad = document.createElement("div");
-			ad.className = "ad";
-			ad.textContent = "AdSense In-Feed Ad";
-			grid.appendChild(ad);
+		if (isMobile() == false) {
+			if (index > 0 && index % 12 === 0) {
+				const ad = document.createElement("div");
+				ad.className = "ad";
+				ad.textContent = "AdSense In-Feed Ad";
+				grid.appendChild(ad);
+			}
 		}
 
 		const card = document.createElement("div");
@@ -134,6 +139,18 @@ function renderChannels(list) {
 	});
 }
 
+function scrollToMain() {
+	const main = document.querySelector('main');
+	console.log(main);
+	if (!main) return;
+
+	main.scrollIntoView({
+		behavior: 'smooth',
+		block: 'start'
+	});
+}
+
+
 function populateCountries(countries) {
 	countries.forEach(c => {
 		const opt = document.createElement("option");
@@ -165,12 +182,14 @@ function filterPlayableChannels(logosMap) {
 }
 
 function setTraveseTexts() {
-	nextIndex = currentChannelIndex + 1;
-	if (filtered[nextIndex] == undefined) nextIndex = 0;
-	nextBtn.textContent = filtered[nextIndex].name + " ⟩";
-	prevIndex = currentChannelIndex - 1;
-	if (filtered[prevIndex] == undefined) prevIndex = filtered.length - 1;
-	prevBtn.textContent = filtered[prevIndex].name + " ⟨";
+	if (isMobile() == false) {
+		nextIndex = currentChannelIndex + 1;
+		if (filtered[nextIndex] == undefined) nextIndex = 0;
+		nextBtn.textContent = filtered[nextIndex].name + " ⟩";
+		prevIndex = currentChannelIndex - 1;
+		if (filtered[prevIndex] == undefined) prevIndex = filtered.length - 1;
+		prevBtn.textContent = filtered[prevIndex].name + " ⟨";
+	}
 
 	const favBtnModal = document.querySelector(".fav-btn-modal");
 	favBtnModal.classList.remove('active');
@@ -201,16 +220,20 @@ function playChannel(url) {
 		window.hls = null;
 	}
 
-	// Show nav buttons on hover
-	modal.onmousemove = () => {
-		prevBtn.style.display = "block";
-		nextBtn.style.display = "block";
-		clearTimeout(modal.hideTimeout);
-		modal.hideTimeout = setTimeout(() => {
-			prevBtn.style.display = "none";
-			nextBtn.style.display = "none";
-		}, 2000);
-	};
+	prevBtn.style.display = "none";
+	nextBtn.style.display = "none";
+	if (isMobile() == false) {
+		// Show nav buttons on hover
+		modal.onmousemove = () => {
+			prevBtn.style.display = "block";
+			nextBtn.style.display = "block";
+			clearTimeout(modal.hideTimeout);
+			modal.hideTimeout = setTimeout(() => {
+				prevBtn.style.display = "none";
+				nextBtn.style.display = "none";
+			}, 2000);
+		};
+	}
 
 	// Show channel name overlay
 	channelName.textContent = filtered[currentChannelIndex].name;
@@ -290,16 +313,21 @@ async function playVideo(url) {
 	if (window.hls) { window.hls.destroy(); window.hls = null; }
 	if (window.dashPlayer) { window.dashPlayer.reset(); window.dashPlayer = null; }
 
-	// Show nav buttons on hover
-	modal.onmousemove = () => {
-		prevBtn.style.display = "block";
-		nextBtn.style.display = "block";
-		clearTimeout(modal.hideTimeout);
-		modal.hideTimeout = setTimeout(() => {
-			prevBtn.style.display = "none";
-			nextBtn.style.display = "none";
-		}, 2000);
-	};
+	pagination.style.display = "none";
+	prevBtn.style.display = "none";
+	nextBtn.style.display = "none";
+	if (isMobile() == false) {
+		// Show nav buttons on hover
+		modal.onmousemove = () => {
+			prevBtn.style.display = "block";
+			nextBtn.style.display = "block";
+			clearTimeout(modal.hideTimeout);
+			modal.hideTimeout = setTimeout(() => {
+				prevBtn.style.display = "none";
+				nextBtn.style.display = "none";
+			}, 2000);
+		};
+	}
 
 	if (url.endsWith(".m3u8")) {
 		// HLS playback
@@ -373,22 +401,27 @@ async function playVideo(url) {
 	
 		const channelId = filtered[currentChannelIndex].id;
 		const isFav = isFavorite(channelId);
-		const favBtnModal = document.querySelector(".fav-btn-modal");
+		const favBtnModal = modal.querySelector(".fav-btn-modal");
 		favBtnModal.dataset.fav = channelId;
 		favBtnModal.style.cursor = "default";
-		if (isFav) {
+		favBtnModal.removeEventListener("click", () => { });
+
+		if (isFav == true) {
 			favBtnModal.textContent = '★';
 			favBtnModal.classList.add('active');
-			favBtnModal.removeEventListener("click", e => { });
 		} else {
 			favBtnModal.textContent = '☆';
+			favBtnModal.classList.remove('active');
 			favBtnModal.style.cursor = "pointer";
-			favBtnModal.addEventListener("click", e => {
-				e.stopPropagation();
+			/* favBtnModal.addEventListener("click", e => {
+				// e.stopPropagation();
 				const channel = filtered.find(c => c.id === channelId);
+				console.log(channel);
 				if (channel) toggleFavorite(channel);
-			});
+				this.removeEventListener("click", () => {});
+			}); */
 		}
+
 	}
 }
 
@@ -399,6 +432,7 @@ closeModal.onclick = () => {
 	audio.src = "";
 	modal.style.display = "none";
 	videoError.style.display = "none";
+	pagination.style.display = "flex";
 	const favBtnModal = document.querySelector(".fav-btn-modal");
 	favBtnModal.classList.remove('active');
 
@@ -527,10 +561,6 @@ function applyCountryFilter(channels) {
 }
 
 function renderPaginatedChannels() {
-	const grid = document.getElementById('channelGrid');
-	const pagination = document.getElementById('pagination');
-	const pageInfo = document.getElementById('pageInfo');
-
 	grid.innerHTML = '';
 
 	const total = currentCountryChannels.length;
@@ -548,6 +578,7 @@ function renderPaginatedChannels() {
 	const pageChannels = currentCountryChannels.slice(start, end);
 
 	renderChannels(pageChannels); // your existing card render function
+	filtered = pageChannels; // update filtered to full list for navigation
 
 	// Update controls
 	pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
@@ -556,35 +587,52 @@ function renderPaginatedChannels() {
 	document.getElementById('nextPage').disabled = currentPage === totalPages;
 }
 
-document.addEventListener("keydown", e => {
+function keyTouchEvents(e) {
 	if (modal.style.display === "flex") {
-		if (e.key === "ArrowRight") nextBtn.click();
-		if (e.key === "ArrowLeft") prevBtn.click();
-		// show buttons when arrow keys pressed
-		prevBtn.style.display = "block";
-		nextBtn.style.display = "block";
-		clearTimeout(modal.hideTimeout);
-		modal.hideTimeout = setTimeout(() => {
-			prevBtn.style.display = "none";
-			nextBtn.style.display = "none";
-		}, 2000);
-		// console.log(e.key);
-		if (e.key === 'ArrowUp') {
-			e.preventDefault();
-			if (!document.fullscreenElement) {
-				enterFullscreen(video);
+		if (e.key === "ArrowRight" || e.type === "swiped-left") nextBtn.click();
+		if (e.key === "ArrowLeft" || e.type === "swiped-right") prevBtn.click();
+
+		// console.log(isMobile());
+		prevBtn.style.display = "none";
+		nextBtn.style.display = "none";
+
+		if (isMobile() == false) {
+			// show buttons when arrow keys pressed
+			prevBtn.style.display = "block";
+			nextBtn.style.display = "block";
+			clearTimeout(modal.hideTimeout);
+			modal.hideTimeout = setTimeout(() => {
+				prevBtn.style.display = "none";
+				nextBtn.style.display = "none";
+			}, 2000);
+			// console.log(e.key);
+			if (e.key === 'ArrowUp') {
+				e.preventDefault();
+				if (!document.fullscreenElement) {
+					enterFullscreen(video);
+				}
 			}
-		}
-		if (e.key === 'ArrowDown') {
-			e.preventDefault();
-			if (document.fullscreenElement) {
-				exitFullscreen();
+			if (e.key === 'ArrowDown') {
+				e.preventDefault();
+				if (document.fullscreenElement) {
+					exitFullscreen();
+				}
 			}
-		}
-		if (e.key === 'Escape') {
-			closeModal.click();
+			if (e.key === 'Escape') {
+				closeModal.click();
+			}
 		}
 	}
+}
+
+document.addEventListener("keydown", e => {
+	keyTouchEvents(e);
+});
+document.addEventListener('swiped-left', e => {
+	keyTouchEvents(e);
+});
+document.addEventListener('swiped-right', e => {
+	keyTouchEvents(e);
 });
 
 // Listen for fullscreen changes
@@ -610,7 +658,7 @@ document.getElementById('prevPage').addEventListener('click', () => {
 	if (currentPage > 1) {
 		currentPage--;
 		renderPaginatedChannels();
-		window.scrollTo({ top: 0, behavior: 'smooth' });
+		// window.scrollTo({ top: 0, behavior: 'smooth' });
 	}
 });
 
@@ -622,7 +670,7 @@ document.getElementById('nextPage').addEventListener('click', () => {
 	if (currentPage < totalPages) {
 		currentPage++;
 		renderPaginatedChannels();
-		window.scrollTo({ top: 0, behavior: 'smooth' });
+		// window.scrollTo({ top: 0, behavior: 'smooth' });
 	}
 });
 
@@ -685,11 +733,7 @@ showFavs.onclick = () => {
 		showingFavs = true;
 		const favs = JSON.parse(localStorage.getItem(FAVORITES_KEY) || '[]');
 		const favChannels = [];
-		/* for (let index = 0; index < favs.length; index++) {
-			const fav = favs[index];
-			console.log(fav);
-			favChannels.push(fav);
-		} */
+		showFavs.textContent = "★ Hide Favorites";
 		Object.keys(favs).forEach(key => {
 			const fav = favs[key];
 			// console.log(fav);
@@ -700,8 +744,20 @@ showFavs.onclick = () => {
 		// renderChannels(favs);
 	} else {
 		showingFavs = false;
+		showFavs.textContent = "★ Show Favorites";
 		filterUI();
 	}
 };
+
+function isMobile() {
+	const toMatch = [
+		/Android/i,
+		/BlackBerry/i,
+		/iPhone/i,
+		/Opera Mini/i,
+		/Windows Phone/i
+	];
+	return toMatch.some((toMatch) => navigator.userAgent.match(toMatch));
+}
 
 loadData();
