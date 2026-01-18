@@ -15,6 +15,7 @@ const fullscreenOverlay = document.getElementById("fullscreenOverlay");
 const prevNameEl = document.getElementById("prevChannelName");
 const currentNameEl = document.getElementById("currentChannelName");
 const nextNameEl = document.getElementById("nextChannelName");
+const favBtnModal = document.querySelector(".fav-btn-modal");
 
 const pagination = document.getElementById('pagination');
 const pageInfo = document.getElementById('pageInfo');
@@ -191,7 +192,6 @@ function setTraveseTexts() {
 		prevBtn.textContent = filtered[prevIndex].name + " ⟨";
 	}
 
-	const favBtnModal = document.querySelector(".fav-btn-modal");
 	favBtnModal.classList.remove('active');
 }
 
@@ -227,20 +227,22 @@ function playChannel(url) {
 		modal.onmousemove = () => {
 			prevBtn.style.display = "block";
 			nextBtn.style.display = "block";
+			channelName.classList.remove("idle");
 			clearTimeout(modal.hideTimeout);
 			modal.hideTimeout = setTimeout(() => {
 				prevBtn.style.display = "none";
 				nextBtn.style.display = "none";
+				channelName.classList.add("idle");
 			}, 2000);
 		};
 	}
 
 	// Show channel name overlay
 	channelName.textContent = filtered[currentChannelIndex].name;
-	channelName.classList.remove("hide");
+	channelName.classList.remove("idle");
 	clearTimeout(channelName.hideTimeout);
 	channelName.hideTimeout = setTimeout(() => {
-		channelName.classList.add("hide");
+		channelName.classList.add("idle");
 	}, 3000);
 
 	if (document.fullscreenElement) {
@@ -321,10 +323,12 @@ async function playVideo(url) {
 		modal.onmousemove = () => {
 			prevBtn.style.display = "block";
 			nextBtn.style.display = "block";
+			channelName.classList.remove("idle");
 			clearTimeout(modal.hideTimeout);
 			modal.hideTimeout = setTimeout(() => {
 				prevBtn.style.display = "none";
 				nextBtn.style.display = "none";
+				channelName.classList.add("idle");
 			}, 2000);
 		};
 	}
@@ -393,18 +397,18 @@ async function playVideo(url) {
 	if (filtered[currentChannelIndex]) {
 		// Show channel name overlay
 		channelName.textContent = filtered[currentChannelIndex].name;
-		channelName.classList.remove("hide");
+		channelName.classList.remove("idle");
 		clearTimeout(channelName.hideTimeout);
 		channelName.hideTimeout = setTimeout(() => {
-			channelName.classList.add("hide");
+			channelName.classList.add("idle");
 		}, 3000);
 	
 		const channelId = filtered[currentChannelIndex].id;
 		const isFav = isFavorite(channelId);
-		const favBtnModal = modal.querySelector(".fav-btn-modal");
 		favBtnModal.dataset.fav = channelId;
 		favBtnModal.style.cursor = "default";
 		favBtnModal.removeEventListener("click", () => { });
+		favBtnModal.style.cursor = "pointer";
 
 		if (isFav == true) {
 			favBtnModal.textContent = '★';
@@ -412,14 +416,6 @@ async function playVideo(url) {
 		} else {
 			favBtnModal.textContent = '☆';
 			favBtnModal.classList.remove('active');
-			favBtnModal.style.cursor = "pointer";
-			/* favBtnModal.addEventListener("click", e => {
-				// e.stopPropagation();
-				const channel = filtered.find(c => c.id === channelId);
-				console.log(channel);
-				if (channel) toggleFavorite(channel);
-				this.removeEventListener("click", () => {});
-			}); */
 		}
 
 	}
@@ -433,7 +429,7 @@ closeModal.onclick = () => {
 	modal.style.display = "none";
 	videoError.style.display = "none";
 	pagination.style.display = "flex";
-	const favBtnModal = document.querySelector(".fav-btn-modal");
+
 	favBtnModal.classList.remove('active');
 
 	if (window.hls) { window.hls.destroy(); window.hls = null; }
@@ -534,11 +530,11 @@ function showFullscreenChannelNames() {
 	nextNameEl.textContent = filtered[nextIndex].name;
 
 	fullscreenOverlay.style.display = "flex";
-	fullscreenOverlay.classList.remove("hide");
+	fullscreenOverlay.classList.remove("idle");
 
 	clearTimeout(fullscreenOverlay.hideTimeout);
 	fullscreenOverlay.hideTimeout = setTimeout(() => {
-		fullscreenOverlay.classList.add("hide");
+		fullscreenOverlay.classList.add("idle");
 	}, 3000);
 }
 
@@ -759,6 +755,14 @@ showFavs.onclick = () => {
 		filterUI();
 	}
 };
+
+favBtnModal.addEventListener("click", e => {
+	e.stopPropagation();
+	let channelId = e.target.getAttribute('data-fav');
+	const channel = filtered.find(c => c.id === channelId);
+	// console.log(channel);
+	if (channel) toggleFavorite(channel);
+});
 
 function isMobile() {
 	const toMatch = [

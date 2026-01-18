@@ -439,8 +439,8 @@ main {
 	transition: opacity 0.5s ease;
 }
 
-.channel-name.hide {
-	opacity: 0;
+.channel-name.idle {
+	opacity: 0.3;
 }
 
 #videoPlayer {
@@ -469,7 +469,7 @@ main {
 	transition: opacity 0.5s;
 }
 
-.overlay-name.hide {
+.overlay-name.idle {
 	opacity: 0;
 }
 
@@ -613,4 +613,8 @@ main {
 	border-top: 1px solid rgba(255, 255, 255, 0.08);
 	font-size: 13px;
 	color: rgba(255, 255, 255, 0.5);
+}
+
+.hide {
+	display: none !important;
 }
