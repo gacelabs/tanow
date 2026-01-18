@@ -125,7 +125,7 @@ main {
 
 /* Grid */
 .grid {
-	display: grid;
+	/* display: grid; */
 	gap: 15px;
 	width: 100%;
 	grid-template-columns: repeat(2, 1fr);

@@ -76,6 +76,7 @@ async function loadData() {
 		}
 		
 		loading.style.display = "none";
+		grid.style.display = "grid";
 
 	} catch (e) {
 		console.error(e);
@@ -87,9 +88,9 @@ const nextBtn = document.getElementById("nextChannel");
 const prevBtn = document.getElementById("prevChannel");
 // 'https://placehold.co/300x150?text=No+Logo'
 function renderChannels(list) {
-	// grid.innerHTML = "";
+	grid.innerHTML = "";
 
-	list.reverse().forEach((c, index) => {
+	list/* .reverse() */.forEach((c, index) => {
 		/* if (index > 0 && index % (getRandomIntInclusive(1, 10)) === 0) {
 			const ad = document.createElement("div");
 			ad.className = "ad";
@@ -133,7 +134,8 @@ function renderChannels(list) {
 			setTraveseTexts();
 			playVideo(c.stream);
 		};
-		grid.prepend(card);
+		
+		grid.appendChild(card);
 	});
 
 	document.querySelectorAll(".fav-btn").forEach(btn => {
@@ -564,7 +566,7 @@ function applyCountryFilter(channels) {
 }
 
 function renderPaginatedChannels() {
-	// grid.innerHTML = '';
+	grid.innerHTML = '';
 
 	const total = currentCountryChannels.length;
 	const totalPages = getTotalPages();
