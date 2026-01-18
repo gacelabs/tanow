@@ -597,15 +597,42 @@ function keyTouchEvents(e) {
 	let element = document.activeElement;
 	if (modal.style.display === "flex") {
 		tabs = [...modal.querySelectorAll('[tabindex]')];
-		alert(e.keyCode);
-		console.log(e);
+		// alert(e.keyCode);
+		// console.log(e);
 		
 		if (e.type === "swiped-left") nextBtn.click();
 		if (e.type === "swiped-right") prevBtn.click();
 
 		switch (e.key) {
-			case ' ':
-			case 'MediaPlayPause':
+			case 'ArrowRight':
+				nextBtn.click();
+				element = nextBtn;
+				break;
+			case 'ArrowLeft':
+				prevBtn.click();
+				element = prevBtn;
+				break;
+			case 'ArrowUp':
+				if (!document.fullscreenElement) {
+					enterFullscreen(video);
+				}
+				break;
+			case 'ArrowDown':
+				if (document.fullscreenElement) {
+					exitFullscreen();
+				}
+				break;
+		}
+
+		switch (e.keyCode) {
+			case 0:
+				if (!document.fullscreenElement) {
+					enterFullscreen(video);
+				} else {
+					exitFullscreen();
+				}
+				break;
+			case 179:
 				e.preventDefault();
 				if (video.paused) {
 					video.play();
@@ -613,31 +640,16 @@ function keyTouchEvents(e) {
 					video.pause();
 				}
 				break;
-
-			case 'ArrowRight':
-			case 'MediaTrackNext':
-				nextBtn.click();
-				element = nextBtn;
-				break;
-
-			case 'ArrowLeft':
-			case 'MediaTrackPrevious':
+			case 227:
 				prevBtn.click();
 				element = prevBtn;
 				break;
-
-			case 'ArrowUp':
-				if (!document.fullscreenElement) {
-					enterFullscreen(video);
-				}
-				break;
-
-			case 'ArrowDown':
-				if (document.fullscreenElement) {
-					exitFullscreen();
-				}
+			case 228:
+				nextBtn.click();
+				element = nextBtn;
 				break;
 		}
+
 		if (e.key === 'Escape') {
 			closeModal.click();
 		}
