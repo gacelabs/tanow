@@ -631,3 +631,22 @@ main {
 .hide {
 	display: none !important;
 }
+
+.install-btn {
+	background: #e50914;
+	color: #fff;
+	border: none;
+	padding: 10px 18px;
+	border-radius: 8px;
+	font-size: 14px;
+	cursor: pointer;
+}
+
+.install-btn:focus {
+	outline: none;
+	box-shadow: 0 0 0 3px rgba(229, 9, 20, .7);
+}
+
+.pwa-mode {
+	overscroll-behavior: none;
+}

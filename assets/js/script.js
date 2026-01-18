@@ -868,5 +868,29 @@ function getRandomIntInclusive(min, max) {
 	return Math.floor(Math.random() * (max - min + 1)) + min; // The maximum is inclusive and the minimum is inclusive
 }
 
-
 loadData();
+
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', e => {
+	e.preventDefault();
+	deferredPrompt = e;
+
+	const btn = document.getElementById('installBtn');
+	btn.hidden = false;
+
+	btn.addEventListener('click', async () => {
+		deferredPrompt.prompt();
+		await deferredPrompt.userChoice;
+		deferredPrompt = null;
+		btn.hidden = true;
+	});
+});
+
+
+if ('serviceWorker' in navigator) {
+	navigator.serviceWorker.register('/assets/js/sw.js');
+}
+
+if (window.matchMedia('(display-mode: standalone)').matches) {
+	document.body.classList.add('pwa-mode');
+}
