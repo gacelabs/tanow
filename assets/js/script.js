@@ -597,7 +597,7 @@ function keyTouchEvents(e) {
 	let element = document.activeElement;
 	if (modal.style.display === "flex") {
 		tabs = [...modal.querySelectorAll('[tabindex]')];
-		alert(e.key);
+		alert(console.log(e));
 		
 		if (isMobile() == false) {
 			if (e.key === "ArrowRight") {
@@ -710,15 +710,14 @@ function keyTouchEvents(e) {
 		element.click();
 		return;
 	}
-	if (REMOTE_KEYS.BACK.includes(e.key)) {
+	/* if (REMOTE_KEYS.BACK.includes(e.key)) {
 		closePlayerModal();
 		return;
-	}
-
+	} */
 	if (tabs[nextIndex]) {
 		e.preventDefault();
 		tabs[nextIndex].focus();
-		console.log(tabs[nextIndex]);
+		// console.log(tabs[nextIndex]);
 	}
 	prevIndex = nextIndex;
 }
