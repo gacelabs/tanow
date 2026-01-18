@@ -591,31 +591,23 @@ function renderPaginatedChannels() {
 	document.getElementById('lastPage').disabled = currentPage === totalPages;
 }
 
+let prevIndex = 0;
 function keyTouchEvents(e) {
 	let tabs = [];
+	let element = document.activeElement;
 	if (modal.style.display === "flex") {
 		tabs = [...modal.querySelectorAll('[tabindex]')];
-		/* if (document.activeElement === document.body || document.activeElement === video) {
-			document.activeElement = e.key === "ArrowRight" ? nextBtn : (e.key === "ArrowLeft" ? prevBtn : document.activeElement);
-			console.log(document.activeElement, e.key);
-		} */
-		if (e.key === "ArrowRight" || e.type === "swiped-left" || document.activeElement === nextBtn) nextBtn.click();
-		if (e.key === "ArrowLeft" || e.type === "swiped-right" || document.activeElement === prevBtn) prevBtn.click();
-		// console.log(document.activeElement, e.key);
-		// console.log(isMobile());
-		/* prevBtn.style.display = "none";
-		nextBtn.style.display = "none"; */
-
-		// if (isMobile() == false) {
-			// show buttons when arrow keys pressed
-			prevBtn.style.display = "block";
-			nextBtn.style.display = "block";
-			clearTimeout(modal.hideTimeout);
-			modal.hideTimeout = setTimeout(() => {
-				prevBtn.style.display = "none";
-				nextBtn.style.display = "none";
-			}, 2000);
-			// console.log(e.key);
+		
+		if (isMobile() == false) {
+			if (e.key === "ArrowRight") {
+				nextBtn.click();
+				element = nextBtn;
+			}
+			if (e.key === "ArrowLeft") {
+				prevBtn.click();
+				element = prevBtn;
+			}
+				
 			if (e.key === 'ArrowUp') {
 				e.preventDefault();
 				if (!document.fullscreenElement) {
@@ -631,54 +623,103 @@ function keyTouchEvents(e) {
 			if (e.key === 'Escape') {
 				closeModal.click();
 			}
-		// }
+		} else {
+			if (e.type === "swiped-left") nextBtn.click();
+			if (e.type === "swiped-right") prevBtn.click();
+
+			switch (e.key) {
+				case ' ':
+				case 'MediaPlayPause':
+					e.preventDefault();
+					if (video.paused) {
+						video.play();
+					} else {
+						video.pause();
+					}
+					break;
+
+				case 'ArrowRight':
+				case 'MediaTrackNext':
+					nextBtn.click();
+					element = nextBtn;
+					break;
+
+				case 'ArrowLeft':
+				case 'MediaTrackPrevious':
+					prevBtn.click();
+					element = prevBtn;
+					break;
+
+				case 'ArrowUp':
+					if (!document.fullscreenElement) {
+						enterFullscreen(video);
+					}
+					break;
+
+				case 'ArrowDown':
+					if (document.fullscreenElement) {
+						exitFullscreen();
+					}
+					break;
+			}
+		}
+		// console.log(document.activeElement, e.key);
+		// console.log(isMobile());
+		/* prevBtn.style.display = "none";
+		nextBtn.style.display = "none"; */
+
+		// show buttons when arrow keys pressed
+		prevBtn.style.display = "block";
+		nextBtn.style.display = "block";
+		clearTimeout(modal.hideTimeout);
+		modal.hideTimeout = setTimeout(() => {
+			prevBtn.style.display = "none";
+			nextBtn.style.display = "none";
+		}, 2000);
 	} else {
 		tabs = [...document.querySelectorAll('[tabindex]')];
 	}
-
-	let index = tabs.indexOf(document.activeElement);
+	
+	let index = tabs.indexOf(element);
 
 	// If nothing focused yet, focus first card
-	if (index === -1 || document.activeElement === document.body || document.activeElement === video) {
-		tabs[0].focus();
-		index = 0;
+	if (index < 0 || element === document.body || element === video) {
+		index = prevIndex;
+		element = tabs[index];
 	}
+	// console.log(prevIndex, index, element, e.key);
 
 	const columns = getGridColumns();
 	let nextIndex = index;
-
 	if (REMOTE_KEYS.LEFT.includes(e.key)) {
 		nextIndex = index - 1;
 	}
-
 	if (REMOTE_KEYS.RIGHT.includes(e.key)) {
 		nextIndex = index + 1;
 	}
-
 	if (REMOTE_KEYS.UP.includes(e.key)) {
 		nextIndex = index - columns;
 	}
-
 	if (REMOTE_KEYS.DOWN.includes(e.key)) {
 		nextIndex = index + columns;
 	}
 
 	if (REMOTE_KEYS.OK.includes(e.key)) {
 		e.preventDefault();
-		document.activeElement.click();
+		element.click();
 		return;
 	}
-
-	/* if (REMOTE_KEYS.BACK.includes(e.key)) {
+	if (REMOTE_KEYS.BACK.includes(e.key)) {
 		closePlayerModal();
 		return;
-	} */
-	if (nextIndex < 0) nextIndex = 0;
+	}
 
 	if (tabs[nextIndex]) {
 		e.preventDefault();
 		tabs[nextIndex].focus();
+		console.log(tabs[nextIndex]);
 	}
+	prevIndex = nextIndex;
 }
 
 document.addEventListener("keydown", e => {
