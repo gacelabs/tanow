@@ -134,7 +134,7 @@ function renderChannels(list) {
 			setTraveseTexts();
 			playVideo(c.stream);
 		};
-		
+
 		grid.appendChild(card);
 	});
 
@@ -160,7 +160,6 @@ function scrollToMain() {
 		block: 'start'
 	});
 }
-
 
 function populateCountries(countries) {
 	countries.forEach(c => {
@@ -446,7 +445,14 @@ closeModal.onclick = () => {
 };
 
 searchInput.oninput = filterUI;
-countryFilter.onchange = filterUI;
+countryFilter.onchange = function () {
+	if (showingFavs) {
+		showingFavs = false;
+		showFavs.textContent = "★ Show Favorites";
+	}
+
+	filterUI();
+}
 
 function filterUI(playableData) {
 	const q = searchInput.value.toLowerCase().trim();
