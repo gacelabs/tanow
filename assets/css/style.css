@@ -167,6 +167,18 @@ main {
 	height: 100%;
 }
 
+.card:focus {
+	outline: none;
+	transform: scale(1.05);
+	box-shadow: 0 0 0 3px rgba(229, 225, 9, 0.9);
+	z-index: 2;
+}
+
+.card:hover,
+.card:focus {
+	transform: scale(1.05);
+}
+
 .card-top {
 	position: relative;
 	background: #919191;

@@ -33,6 +33,15 @@ const CHANNELS_PER_PAGE = 30;
 let currentPage = 1;
 let currentCountryChannels = [];
 
+const REMOTE_KEYS = {
+	LEFT: ['ArrowLeft'],
+	RIGHT: ['ArrowRight'],
+	UP: ['ArrowUp'],
+	DOWN: ['ArrowDown'],
+	OK: ['Enter'],
+	BACK: ['Escape', 'Backspace']
+};
+
 async function detectUserCountry() {
 	try {
 		const res = await fetch('https://ipapi.co/json/');
@@ -107,6 +116,7 @@ function renderChannels(list) {
 
 		const card = document.createElement("div");
 		card.className = "card";
+		card.tabIndex = 0;
 		const isFav = isFavorite(c.id);
 		const logo = c.logo;
 
@@ -603,6 +613,52 @@ function renderPaginatedChannels() {
 
 function keyTouchEvents(e) {
 	if (modal.style.display === "flex") {
+		const cards = [...document.querySelectorAll('.card')];
+		if (!cards.length) return;
+
+		let index = cards.indexOf(document.activeElement);
+
+		// If nothing focused yet, focus first card
+		if (index === -1) {
+			cards[0].focus();
+			return;
+		}
+
+		const columns = getGridColumns();
+		let nextIndex = index;
+
+		if (REMOTE_KEYS.LEFT.includes(e.key)) {
+			nextIndex = index - 1;
+		}
+
+		if (REMOTE_KEYS.RIGHT.includes(e.key)) {
+			nextIndex = index + 1;
+		}
+
+		if (REMOTE_KEYS.UP.includes(e.key)) {
+			nextIndex = index - columns;
+		}
+
+		if (REMOTE_KEYS.DOWN.includes(e.key)) {
+			nextIndex = index + columns;
+		}
+
+		if (REMOTE_KEYS.OK.includes(e.key)) {
+			e.preventDefault();
+			document.activeElement.click();
+			return;
+		}
+
+		/* if (REMOTE_KEYS.BACK.includes(e.key)) {
+			closePlayerModal();
+			return;
+		} */
+
+		if (cards[nextIndex]) {
+			e.preventDefault();
+			cards[nextIndex].focus();
+		}
+
 		if (e.key === "ArrowRight" || e.type === "swiped-left") nextBtn.click();
 		if (e.key === "ArrowLeft" || e.type === "swiped-right") prevBtn.click();
 
@@ -695,6 +751,16 @@ document.getElementById('lastPage').addEventListener('click', () => {
 	}
 });
 
+function getGridColumns() {
+	const grid = document.getElementById('channelGrid');
+	const card = grid?.querySelector('.card');
+	if (!grid || !card) return 1;
+
+	const gridWidth = grid.clientWidth;
+	const cardWidth = card.clientWidth;
+
+	return Math.round(gridWidth / cardWidth);
+}
 
 const FAVORITES_KEY = "iptv_favorites";
 
