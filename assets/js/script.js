@@ -87,15 +87,22 @@ const nextBtn = document.getElementById("nextChannel");
 const prevBtn = document.getElementById("prevChannel");
 // 'https://placehold.co/300x150?text=No+Logo'
 function renderChannels(list) {
-	grid.innerHTML = "";
+	// grid.innerHTML = "";
 
-	list.forEach((c, index) => {
-		if (index > 0 && index % 10 === 0) {
+	list.reverse().forEach((c, index) => {
+		/* if (index > 0 && index % (getRandomIntInclusive(1, 10)) === 0) {
 			const ad = document.createElement("div");
 			ad.className = "ad";
-			ad.textContent = "AdSense In-Feed Ad";
+			ad.innerHTML = `
+			<ins class="adsbygoogle"
+				style="display:block"
+				data-ad-format="autorelaxed"
+				data-ad-client="ca-pub-3716182521515143"
+				data-ad-slot="6089273260">
+			</ins>
+			`;
 			grid.appendChild(ad);
-		}
+		} */
 
 		const card = document.createElement("div");
 		card.className = "card";
@@ -126,7 +133,7 @@ function renderChannels(list) {
 			setTraveseTexts();
 			playVideo(c.stream);
 		};
-		grid.appendChild(card);
+		grid.prepend(card);
 	});
 
 	document.querySelectorAll(".fav-btn").forEach(btn => {
@@ -557,7 +564,7 @@ function applyCountryFilter(channels) {
 }
 
 function renderPaginatedChannels() {
-	grid.innerHTML = '';
+	// grid.innerHTML = '';
 
 	const total = currentCountryChannels.length;
 	const totalPages = getTotalPages();
@@ -779,6 +786,12 @@ function getTotalPages() {
 	return Math.ceil(
 		currentCountryChannels.length / CHANNELS_PER_PAGE
 	);
+}
+
+function getRandomIntInclusive(min, max) {
+	min = Math.ceil(min);
+	max = Math.floor(max);
+	return Math.floor(Math.random() * (max - min + 1)) + min; // The maximum is inclusive and the minimum is inclusive
 }
 
 
