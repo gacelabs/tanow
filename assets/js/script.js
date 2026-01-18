@@ -324,8 +324,8 @@ async function playVideo(url) {
 	if (window.dashPlayer) { window.dashPlayer.reset(); window.dashPlayer = null; }
 
 	pagination.style.display = "none";
-	prevBtn.style.display = "none";
-	nextBtn.style.display = "none";
+	// prevBtn.style.display = "none";
+	// nextBtn.style.display = "none";
 	// if (isMobile() == false) {
 		// Show nav buttons on hover
 		modal.onmousemove = () => {
