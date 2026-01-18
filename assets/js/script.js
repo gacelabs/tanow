@@ -597,72 +597,48 @@ function keyTouchEvents(e) {
 	let element = document.activeElement;
 	if (modal.style.display === "flex") {
 		tabs = [...modal.querySelectorAll('[tabindex]')];
-		alert(console.log(e));
+		alert(e);
 		
-		if (isMobile() == false) {
-			if (e.key === "ArrowRight") {
+		if (e.type === "swiped-left") nextBtn.click();
+		if (e.type === "swiped-right") prevBtn.click();
+
+		switch (e.key) {
+			case ' ':
+			case 'MediaPlayPause':
+				e.preventDefault();
+				if (video.paused) {
+					video.play();
+				} else {
+					video.pause();
+				}
+				break;
+
+			case 'ArrowRight':
+			case 'MediaTrackNext':
 				nextBtn.click();
 				element = nextBtn;
-			}
-			if (e.key === "ArrowLeft") {
+				break;
+
+			case 'ArrowLeft':
+			case 'MediaTrackPrevious':
 				prevBtn.click();
 				element = prevBtn;
-			}
-				
-			if (e.key === 'ArrowUp') {
-				e.preventDefault();
+				break;
+
+			case 'ArrowUp':
 				if (!document.fullscreenElement) {
 					enterFullscreen(video);
 				}
-			}
-			if (e.key === 'ArrowDown') {
-				e.preventDefault();
+				break;
+
+			case 'ArrowDown':
 				if (document.fullscreenElement) {
 					exitFullscreen();
 				}
-			}
-			if (e.key === 'Escape') {
-				closeModal.click();
-			}
-		} else {
-			if (e.type === "swiped-left") nextBtn.click();
-			if (e.type === "swiped-right") prevBtn.click();
-
-			switch (e.key) {
-				case ' ':
-				case 'MediaPlayPause':
-					e.preventDefault();
-					if (video.paused) {
-						video.play();
-					} else {
-						video.pause();
-					}
-					break;
-
-				case 'ArrowRight':
-				case 'MediaTrackNext':
-					nextBtn.click();
-					element = nextBtn;
-					break;
-
-				case 'ArrowLeft':
-				case 'MediaTrackPrevious':
-					prevBtn.click();
-					element = prevBtn;
-					break;
-
-				case 'ArrowUp':
-					if (!document.fullscreenElement) {
-						enterFullscreen(video);
-					}
-					break;
-
-				case 'ArrowDown':
-					if (document.fullscreenElement) {
-						exitFullscreen();
-					}
-					break;
-			}
+				break;
+		}
+		if (e.key === 'Escape') {
+			closeModal.click();
 		}
 		// console.log(document.activeElement, e.key);
 		// console.log(isMobile());
@@ -691,9 +667,10 @@ function keyTouchEvents(e) {
 	// console.log(prevIndex, index, element, e.key);
 
 	const columns = getGridColumns();
-	let nextIndex = index;
+	let nextIndex = index < 0 ? 0 : index;
+
 	if (REMOTE_KEYS.LEFT.includes(e.key)) {
-		nextIndex = index - 1;
+		nextIndex = index < 0 ? 0 : index - 1;
 	}
 	if (REMOTE_KEYS.RIGHT.includes(e.key)) {
 		nextIndex = index + 1;
