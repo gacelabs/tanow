@@ -191,14 +191,14 @@ function filterPlayableChannels(logosMap) {
 }
 
 function setTraveseTexts() {
-	if (isMobile() == false) {
+	// if (isMobile() == false) {
 		nextIndex = currentChannelIndex + 1;
 		if (filtered[nextIndex] == undefined) nextIndex = 0;
 		nextBtn.textContent = filtered[nextIndex].name + " ⟩";
 		prevIndex = currentChannelIndex - 1;
 		if (filtered[prevIndex] == undefined) prevIndex = filtered.length - 1;
 		prevBtn.textContent = filtered[prevIndex].name + " ⟨";
-	}
+	// }
 
 	favBtnModal.classList.remove('active');
 }
@@ -230,7 +230,7 @@ function playChannel(url) {
 
 	prevBtn.style.display = "none";
 	nextBtn.style.display = "none";
-	if (isMobile() == false) {
+	// if (isMobile() == false) {
 		// Show nav buttons on hover
 		modal.onmousemove = () => {
 			prevBtn.style.display = "block";
@@ -243,7 +243,7 @@ function playChannel(url) {
 				channelName.classList.add("idle");
 			}, 2000);
 		};
-	}
+	// }
 
 	// Show channel name overlay
 	channelName.textContent = filtered[currentChannelIndex].name;
@@ -326,7 +326,7 @@ async function playVideo(url) {
 	pagination.style.display = "none";
 	prevBtn.style.display = "none";
 	nextBtn.style.display = "none";
-	if (isMobile() == false) {
+	// if (isMobile() == false) {
 		// Show nav buttons on hover
 		modal.onmousemove = () => {
 			prevBtn.style.display = "block";
@@ -339,7 +339,7 @@ async function playVideo(url) {
 				channelName.classList.add("idle");
 			}, 2000);
 		};
-	}
+	// }
 
 	if (url.endsWith(".m3u8")) {
 		// HLS playback
@@ -610,7 +610,7 @@ function keyTouchEvents(e) {
 		prevBtn.style.display = "none";
 		nextBtn.style.display = "none";
 
-		if (isMobile() == false) {
+		// if (isMobile() == false) {
 			// show buttons when arrow keys pressed
 			prevBtn.style.display = "block";
 			nextBtn.style.display = "block";
@@ -635,7 +635,7 @@ function keyTouchEvents(e) {
 			if (e.key === 'Escape') {
 				closeModal.click();
 			}
-		}
+		// }
 	}
 }
 
