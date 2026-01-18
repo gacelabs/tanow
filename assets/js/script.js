@@ -228,8 +228,8 @@ function playChannel(url) {
 		window.hls = null;
 	}
 
-	prevBtn.style.display = "none";
-	nextBtn.style.display = "none";
+	/* prevBtn.style.display = "none";
+	nextBtn.style.display = "none"; */
 	// if (isMobile() == false) {
 		// Show nav buttons on hover
 		modal.onmousemove = () => {
@@ -607,8 +607,8 @@ function keyTouchEvents(e) {
 		if (e.key === "ArrowLeft" || e.type === "swiped-right") prevBtn.click();
 
 		// console.log(isMobile());
-		prevBtn.style.display = "none";
-		nextBtn.style.display = "none";
+		/* prevBtn.style.display = "none";
+		nextBtn.style.display = "none"; */
 
 		// if (isMobile() == false) {
 			// show buttons when arrow keys pressed
