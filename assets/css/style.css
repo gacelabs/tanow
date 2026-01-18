@@ -23,7 +23,7 @@
 	.logo a {
 		height: 4rem !important;
 	}
-	
+
 	.pagination {
 		bottom: 12px;
 		padding: 6px 12px;
@@ -40,7 +40,6 @@
 	}
 
 	.footer-container {
-		grid-template-columns: 1fr;
 		text-align: center;
 	}
 
@@ -231,7 +230,8 @@ main {
 	transform: scale(1.1);
 }
 
-.fav-btn.active, .fav-btn-modal.active {
+.fav-btn.active,
+.fav-btn-modal.active {
 	color: yellow;
 	text-shadow: 0 0 8px rgb(0 0 0 / 80%);
 }
@@ -569,9 +569,10 @@ main {
 	max-width: 1300px;
 	margin: auto;
 	padding: 40px 20px;
-	display: grid;
-	grid-template-columns: 2fr 1fr 2fr;
+	display: flex;
 	gap: 30px;
+	flex-wrap: wrap;
+	justify-content: center;
 }
 
 .footer-brand img {
