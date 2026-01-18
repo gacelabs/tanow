@@ -242,17 +242,7 @@ function playChannel(url) {
 	nextBtn.style.display = "none"; */
 	// if (isMobile() == false) {
 		// Show nav buttons on hover
-		modal.onmousemove = () => {
-			prevBtn.style.display = "block";
-			nextBtn.style.display = "block";
-			channelName.classList.remove("idle");
-			clearTimeout(modal.hideTimeout);
-			modal.hideTimeout = setTimeout(() => {
-				prevBtn.style.display = "none";
-				nextBtn.style.display = "none";
-				channelName.classList.add("idle");
-			}, 2000);
-		};
+		mouseEvents();
 	// }
 
 	// Show channel name overlay
@@ -338,17 +328,7 @@ async function playVideo(url) {
 	// nextBtn.style.display = "none";
 	// if (isMobile() == false) {
 		// Show nav buttons on hover
-		modal.onmousemove = () => {
-			prevBtn.style.display = "block";
-			nextBtn.style.display = "block";
-			channelName.classList.remove("idle");
-			clearTimeout(modal.hideTimeout);
-			modal.hideTimeout = setTimeout(() => {
-				prevBtn.style.display = "none";
-				nextBtn.style.display = "none";
-				channelName.classList.add("idle");
-			}, 2000);
-		};
+		mouseEvents();
 	// }
 
 	if (url.endsWith(".m3u8")) {
@@ -612,56 +592,16 @@ function renderPaginatedChannels() {
 }
 
 function keyTouchEvents(e) {
+	let tabs = [];
 	if (modal.style.display === "flex") {
-		const cards = [...document.querySelectorAll('.card')];
-		if (!cards.length) return;
-
-		let index = cards.indexOf(document.activeElement);
-
-		// If nothing focused yet, focus first card
-		if (index === -1) {
-			cards[0].focus();
-			return;
-		}
-
-		const columns = getGridColumns();
-		let nextIndex = index;
-
-		if (REMOTE_KEYS.LEFT.includes(e.key)) {
-			nextIndex = index - 1;
-		}
-
-		if (REMOTE_KEYS.RIGHT.includes(e.key)) {
-			nextIndex = index + 1;
-		}
-
-		if (REMOTE_KEYS.UP.includes(e.key)) {
-			nextIndex = index - columns;
-		}
-
-		if (REMOTE_KEYS.DOWN.includes(e.key)) {
-			nextIndex = index + columns;
-		}
-
-		if (REMOTE_KEYS.OK.includes(e.key)) {
-			e.preventDefault();
-			document.activeElement.click();
-			return;
-		}
-
-		/* if (REMOTE_KEYS.BACK.includes(e.key)) {
-			closePlayerModal();
-			return;
+		tabs = [...modal.querySelectorAll('[tabindex]')];
+		/* if (document.activeElement === document.body || document.activeElement === video) {
+			document.activeElement = e.key === "ArrowRight" ? nextBtn : (e.key === "ArrowLeft" ? prevBtn : document.activeElement);
+			console.log(document.activeElement, e.key);
 		} */
-
-		if (cards[nextIndex]) {
-			e.preventDefault();
-			cards[nextIndex].focus();
-		}
-
-		if (e.key === "ArrowRight" || e.type === "swiped-left") nextBtn.click();
-		if (e.key === "ArrowLeft" || e.type === "swiped-right") prevBtn.click();
-
+		if (e.key === "ArrowRight" || e.type === "swiped-left" || document.activeElement === nextBtn) nextBtn.click();
+		if (e.key === "ArrowLeft" || e.type === "swiped-right" || document.activeElement === prevBtn) prevBtn.click();
+		// console.log(document.activeElement, e.key);
 		// console.log(isMobile());
 		/* prevBtn.style.display = "none";
 		nextBtn.style.display = "none"; */
@@ -692,6 +632,52 @@ function keyTouchEvents(e) {
 				closeModal.click();
 			}
 		// }
+	} else {
+		tabs = [...document.querySelectorAll('[tabindex]')];
+	}
+
+	let index = tabs.indexOf(document.activeElement);
+
+	// If nothing focused yet, focus first card
+	if (index === -1 || document.activeElement === document.body || document.activeElement === video) {
+		tabs[0].focus();
+		index = 0;
+	}
+
+	const columns = getGridColumns();
+	let nextIndex = index;
+
+	if (REMOTE_KEYS.LEFT.includes(e.key)) {
+		nextIndex = index - 1;
+	}
+
+	if (REMOTE_KEYS.RIGHT.includes(e.key)) {
+		nextIndex = index + 1;
+	}
+
+	if (REMOTE_KEYS.UP.includes(e.key)) {
+		nextIndex = index - columns;
+	}
+
+	if (REMOTE_KEYS.DOWN.includes(e.key)) {
+		nextIndex = index + columns;
+	}
+
+	if (REMOTE_KEYS.OK.includes(e.key)) {
+		e.preventDefault();
+		document.activeElement.click();
+		return;
+	}
+
+	/* if (REMOTE_KEYS.BACK.includes(e.key)) {
+		closePlayerModal();
+		return;
+	} */
+	if (nextIndex < 0) nextIndex = 0;
+
+	if (tabs[nextIndex]) {
+		e.preventDefault();
+		tabs[nextIndex].focus();
 	}
 }
 
@@ -866,6 +852,22 @@ function getRandomIntInclusive(min, max) {
 	min = Math.ceil(min);
 	max = Math.floor(max);
 	return Math.floor(Math.random() * (max - min + 1)) + min; // The maximum is inclusive and the minimum is inclusive
+}
+
+function mouseEvents() {
+	modal.onmousemove = () => {
+		prevBtn.style.display = "block";
+		nextBtn.style.display = "block";
+		channelName.classList.remove("idle");
+		clearTimeout(modal.hideTimeout);
+		modal.hideTimeout = setTimeout(() => {
+			prevBtn.style.display = "none";
+			nextBtn.style.display = "none";
+			channelName.classList.add("idle");
+		}, 2000);
+	};
+
+	document.onkeydown = modal.onmousemove();
 }
 
 loadData();

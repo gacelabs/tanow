@@ -66,18 +66,18 @@
 		<!-- Header -->
 		<header>
 			<div class="logo">
-				<a href="/"><img src="assets/images/logo.png" alt="TaN📺w"></a>
+				<a href="/" tabindex="0"><img src="assets/images/logo.png" alt="TaN📺w"></a>
 			</div>
 
-			<input type="search" id="searchInput" placeholder="Search channels..." />
+			<input type="search" id="searchInput" placeholder="Search channels..." tabindex="0" />
 
-			<select id="countryFilter">
+			<select id="countryFilter" tabindex="0">
 				<option value="">All Countries</option>
 			</select>
 
-			<button id="showFavs">★ Show Favorites</button>
+			<button id="showFavs" tabindex="0">★ Show Favorites</button>
 
-			<button id="installBtn" class="install-btn" hidden>
+			<button id="installBtn" class="install-btn" hidden tabindex="0">
 				📺 Add to Home
 			</button>
 		</header>
@@ -101,13 +101,13 @@
 			</section>
 			<!-- Pagination Controls -->
 			<div id="pagination" class="pagination hidden">
-				<button id="firstPage" title="First page" disabled>« First</button>
-				<button id="prevPage" disabled>‹ Prev</button>
+				<button id="firstPage" title="First page" disabled tabindex="0">« First</button>
+				<button id="prevPage" disabled tabindex="0">‹ Prev</button>
 			
 				<span id="pageInfo"></span>
 			
-				<button id="nextPage">Next ›</button>
-				<button id="lastPage" title="Last page">Last »</button>
+				<button id="nextPage" tabindex="0">Next ›</button>
+				<button id="lastPage" title="Last page" tabindex="0">Last »</button>
 			</div>
 		</main>
 		
@@ -116,7 +116,7 @@
 			<div class="footer-container">
 		
 				<div class="footer-brand">
-					<a href="/"><img src="assets/images/logo.png" alt="TaNow IPTV Logo"></a>
+					<a href="/" tabindex="0"><img src="assets/images/logo.png" alt="TaNow IPTV Logo"></a>
 					<p>
 						TaNow IPTV is a modern IPTV player that lists publicly available
 						live TV channels from around the world.
@@ -125,8 +125,8 @@
 		
 				<div class="footer-links">
 					<h4>Legal</h4>
-					<a href="/privacy-policy">Privacy Policy</a>
-					<a href="/terms">Terms of Service</a>
+					<a href="/privacy-policy" tabindex="0">Privacy Policy</a>
+					<a href="/terms" tabindex="0">Terms of Service</a>
 				</div>
 		
 				<div class="footer-disclaimer">
@@ -153,7 +153,7 @@
 		<!-- Player Modal -->
 		<div id="playerModal" class="modal">
 			<div class="modal-content">
-				<div class="fav-btn-modal">☆</div>
+				<button class="fav-btn-modal">☆</button>
 				<button id="closeModal">&times;</button>
 
 				<!-- Channel name overlay -->
@@ -175,8 +175,8 @@
 				<div id="videoError" class="video-error" style="display:none;"><span></span>Channel Connection Lost</div>
 		
 				<!-- Navigation buttons -->
-				<button id="prevChannel" class="nav-btn">⟨ Prev</button>
-				<button id="nextChannel" class="nav-btn">Next ⟩</button>
+				<button id="prevChannel" class="nav-btn" tabindex="0">⟨ Prev</button>
+				<button id="nextChannel" class="nav-btn" tabindex="0">Next ⟩</button>
 			</div>
 		</div>
 		
