@@ -597,8 +597,6 @@ function keyTouchEvents(e) {
 	let element = document.activeElement;
 	if (modal.style.display === "flex") {
 		tabs = [...modal.querySelectorAll('[tabindex]')];
-		// alert(e.keyCode);
-		// console.log(e);
 		
 		if (e.type === "swiped-left") nextBtn.click();
 		if (e.type === "swiped-right") prevBtn.click();
