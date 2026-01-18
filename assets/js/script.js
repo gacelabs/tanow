@@ -627,6 +627,7 @@ function keyTouchEvents(e) {
 			if (e.type === "swiped-left") nextBtn.click();
 			if (e.type === "swiped-right") prevBtn.click();
 
+			alert(e.key);
 			switch (e.key) {
 				case ' ':
 				case 'MediaPlayPause':
