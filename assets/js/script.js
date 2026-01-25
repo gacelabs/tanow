@@ -593,44 +593,16 @@ function renderPaginatedChannels() {
 
 let prevIndex = 0;
 function keyTouchEvents(e) {
-	let tabs = [];
-	let element = document.activeElement;
-	if (modal.style.display === "flex") {
-		tabs = [...modal.querySelectorAll('[tabindex]')];
-		// alert(e.keyCode);
-		
-		if (e.type === "swiped-left") nextBtn.click();
-		if (e.type === "swiped-right") prevBtn.click();
-
-		switch (e.key) {
-			case 'ArrowRight':
-				nextBtn.click();
-				element = nextBtn;
-				break;
-			case 'ArrowLeft':
-				prevBtn.click();
-				element = prevBtn;
-				break;
-			case 'ArrowUp':
-				if (!document.fullscreenElement) {
-					enterFullscreen(video);
-				}
-				break;
-			case 'ArrowDown':
-				if (document.fullscreenElement) {
-					exitFullscreen();
-				}
-				break;
+	if (isTV()) {
+		let tabs = [];
+		let element = document.activeElement;
+		if (modal.style.display === "flex") {
+			tabs = [...modal.querySelectorAll('[tabindex]')];
+		} else {
+			tabs = [...document.querySelectorAll('[tabindex]')];
 		}
-
+		// alert(e.keyCode);
 		switch (e.keyCode) {
-			case 0:
-				if (!document.fullscreenElement) {
-					enterFullscreen(video);
-				} else {
-					exitFullscreen();
-				}
-				break;
 			case 179:
 				e.preventDefault();
 				if (video.paused) {
@@ -648,67 +620,72 @@ function keyTouchEvents(e) {
 				element = nextBtn;
 				break;
 		}
-
+		let index = tabs.indexOf(element);
+		// If nothing focused yet, focus first card
+		if (index < 0 || element === document.body || element === video) {
+			index = prevIndex;
+			element = tabs[index];
+		}
+		// console.log(prevIndex, index, element, e.key);
+		const columns = getGridColumns();
+		let nextIndex = index < 0 ? 0 : index;
+		if (REMOTE_KEYS.LEFT.includes(e.key)) {
+			nextIndex = index < 0 ? 0 : index - 1;
+		}
+		if (REMOTE_KEYS.RIGHT.includes(e.key)) {
+			nextIndex = index + 1;
+		}
+		if (REMOTE_KEYS.UP.includes(e.key)) {
+			nextIndex = index - columns;
+		}
+		if (REMOTE_KEYS.DOWN.includes(e.key)) {
+			nextIndex = index + columns;
+		}
+		if (REMOTE_KEYS.OK.includes(e.key)) {
+			e.preventDefault();
+			element.click();
+		}
+		if (tabs[nextIndex]) {
+			e.preventDefault();
+			tabs[nextIndex].focus();
+		}
+		prevIndex = nextIndex;
+	} else {
+		if (modal.style.display === "flex") {
+			if (e.type === "swiped-left") nextBtn.click();
+			if (e.type === "swiped-right") prevBtn.click();
+		} else {
+			switch (e.key) {
+				case 'ArrowRight':
+					nextBtn.click();
+					break;
+				case 'ArrowLeft':
+					prevBtn.click();
+					break;
+				case 'ArrowUp':
+					if (!document.fullscreenElement) {
+						enterFullscreen(video);
+					}
+					break;
+				case 'ArrowDown':
+					if (document.fullscreenElement) {
+						exitFullscreen();
+					}
+					break;
+			}
+		}
 		if (e.key === 'Escape') {
 			closeModal.click();
 		}
-		// console.log(document.activeElement, e.key);
-		// console.log(isMobile());
-		/* prevBtn.style.display = "none";
-		nextBtn.style.display = "none"; */
-
-		// show buttons when arrow keys pressed
-		prevBtn.style.display = "block";
-		nextBtn.style.display = "block";
-		clearTimeout(modal.hideTimeout);
-		modal.hideTimeout = setTimeout(() => {
-			prevBtn.style.display = "none";
-			nextBtn.style.display = "none";
-		}, 2000);
-	} else {
-		tabs = [...document.querySelectorAll('[tabindex]')];
 	}
-	
-	let index = tabs.indexOf(element);
-
-	// If nothing focused yet, focus first card
-	if (index < 0 || element === document.body || element === video) {
-		index = prevIndex;
-		element = tabs[index];
-	}
-	// console.log(prevIndex, index, element, e.key);
-
-	const columns = getGridColumns();
-	let nextIndex = index < 0 ? 0 : index;
-
-	if (REMOTE_KEYS.LEFT.includes(e.key)) {
-		nextIndex = index < 0 ? 0 : index - 1;
-	}
-	if (REMOTE_KEYS.RIGHT.includes(e.key)) {
-		nextIndex = index + 1;
-	}
-	if (REMOTE_KEYS.UP.includes(e.key)) {
-		nextIndex = index - columns;
-	}
-	if (REMOTE_KEYS.DOWN.includes(e.key)) {
-		nextIndex = index + columns;
-	}
-
-	if (REMOTE_KEYS.OK.includes(e.key)) {
-		e.preventDefault();
-		element.click();
-		return;
-	}
-	/* if (REMOTE_KEYS.BACK.includes(e.key)) {
-		closePlayerModal();
-		return;
-	} */
-	if (tabs[nextIndex]) {
-		e.preventDefault();
-		tabs[nextIndex].focus();
-		// console.log(tabs[nextIndex]);
-	}
-	prevIndex = nextIndex;
+	// show buttons when arrow keys pressed
+	prevBtn.style.display = "block";
+	nextBtn.style.display = "block";
+	clearTimeout(modal.hideTimeout);
+	modal.hideTimeout = setTimeout(() => {
+		prevBtn.style.display = "none";
+		nextBtn.style.display = "none";
+	}, 2000);
 }
 
 document.addEventListener("keydown", e => {
@@ -867,7 +844,16 @@ function isMobile() {
 		/BlackBerry/i,
 		/iPhone/i,
 		/Opera Mini/i,
-		/Windows Phone/i
+		/Windows Phone/i,
+	];
+	return toMatch.some((toMatch) => navigator.userAgent.match(toMatch));
+}
+
+function isTV() {
+	const toMatch = [
+		/TV/i,
+		/GoogleTV/i,
+		/SmartTV/i
 	];
 	return toMatch.some((toMatch) => navigator.userAgent.match(toMatch));
 }
